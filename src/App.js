@@ -1,10 +1,10 @@
 import './App.css';
-import Header from './components/Header'
 import { Routes, Route, BrowserRouter, Link } from 'react-router-dom'
 import Homepage from './components/Homepage';
 import About from './components/About';
 import BookingPage from './components/BookingPage';
 import logo from './images/Logo.svg'
+import ConfirmedBooking from './components/ConfirmedBooking';
 
 function App() {
   return (
@@ -25,6 +25,7 @@ function App() {
           <Route path="/" element={<Homepage />}></Route>
           <Route path="/about" element={<About />}></Route>
           <Route path="/reservation" element={<BookingPage />}></Route>
+          <Route path="/confirmed-booking" element={<ConfirmedBooking />}></Route>
         </Routes>
       </BrowserRouter>
     </div>

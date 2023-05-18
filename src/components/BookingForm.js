@@ -1,51 +1,41 @@
-import React, { useState } from "react";
+import React from "react";
 
-const BookingForm = () => {
-    const [date, setDate] = useState('');
-    const [time, setTime] = useState('17:00');
-    const [guest, setGuest] = useState(1);
-    const [occasion, setOccasion] = useState('Birthday');
-    const availableTimes = ['17:00', '18:00', '19:00', '20:00', '21:00', '22:00']
+const BookingForm = ({ date, time, guest, occasion, availableTimes, onDateChange, onTimeChange, onGuestChange, onOccasionChange, onFormSubmit }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        onFormSubmit({ date, time, guest, occasion });
     }
-
-    const handleDateChange = (event) => {
-        setDate(event.target.value)
+    const getIsFormValid = () => {
+        return (date && time && guest.value && occasion)
     }
-
-    const handleTimeChange = (event) => {
-        setTime(event.target.value)
-    }
-
-    const handleGuestChange = (event) => {
-        setGuest(event.target.value)
-    }
-    const handleOccasionChange = (event) => {
-        setOccasion(event.target.value)
+    const GuestErrorMessage = () => {
+        return (
+            <span style={{ color: 'red', fontSize: '12px' }}>Please provide the number of resevetions</span>
+        )
     }
 
     return (
         <>
             <h3>Booking Form</h3>
-            <form style={{display: 'grid', maxWidth: '200px', gap: '20px'}} onSubmit={handleSubmit}>
+            <form style={{ display: 'grid', maxWidth: '200px', gap: '20px' }} onSubmit={handleSubmit}>
                 <label htmlFor='res-date'>Choose date</label>
-                <input type='date' id='date' value={date} onChange={handleDateChange}/>
+                <input type='date' id='date' value={date} onChange={onDateChange} />
                 <label htmlFor='res-time'>Choose time</label>
-                <select id='res-time' value={time} onChange={handleTimeChange}>
+                <select id='res-time' value={time} onChange={onTimeChange}>
                     {availableTimes.map((availableTime) => (
-                        <option key={availableTime}>{availableTime}</option>
+                        <option key={availableTime} value={availableTime}>{availableTime}</option>
                     ))}
                 </select>
                 <label htmlFor='guest'>Number of guests</label>
-                <input type='number' placeholder="1" min="1" max="10" id="guest" value={guest} onChange={handleGuestChange}/>
+                <input type='number' placeholder="1" min="1" max="10" id="guest" value={guest.value} onChange={onGuestChange} />
+                {guest.isValid && guest.isTouched ? null : <GuestErrorMessage />}
                 <label htmlFor="occasion">Occasion</label>
-                <select id="occasion" value={occasion} onChange={handleOccasionChange}>
+                <select id="occasion" value={occasion} onChange={onOccasionChange}>
                     <option>Birthday</option>
                     <option>Anniversary</option>
                 </select>
-                <input type="submit" value="Make Your reservation"></input>
+                <button type="submit" disabled={!getIsFormValid()} aria-label="Make Reservation">Make your reservation</button>
             </form>
         </>
     )
